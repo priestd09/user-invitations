@@ -1,0 +1,28 @@
+{
+    "name": "gocanto/user-invitations",
+    "description": "A dummy users invitations controller",
+    "keywords": ["laravel", "users", "invitations"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gustavo Ocanto",
+            "email": "gustavoocanto@gmail.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "5.2.*",
+        "illuminate/database": "5.2.*",
+        "illuminate/http": "5.2.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gocanto\\UserInvitations\\": "src"
+        }
+    }
+}
