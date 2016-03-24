@@ -2,7 +2,7 @@
     "name": "gocanto/user-invitations",
     "description": "A dummy users invitations controller",
     "keywords": ["laravel", "users", "invitations"],
-    "homepage": "",
+    "homepage": "https://github.com/gocanto/user-invitations",
     "license": "MIT",
     "authors": [
         {
