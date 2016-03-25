@@ -137,9 +137,9 @@ class Invitations extends Controller
     public static function sendEmail(array $data = [])
     {
         Mail::queue('vendor.gocanto.invitations.emailBody', $data, function ($m) use ($data) {
-            $m->from(config('userinvitations.email.username'), trans('userinvitations.email.app_name'));
+            $m->from(config('userinvitations.email.username'), trans('userinvitations.app_name'));
             $m->to($data['user']['email']);
-            $m->subject(trans('userinvitations.email.subject'));
+            $m->subject(trans('userinvitations.subject'));
         });
     }
 }
