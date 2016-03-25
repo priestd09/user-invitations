@@ -15,8 +15,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px !important;"  colspan="2">
-                            {{ trans('userinvitations.hi', ['name' => $user['name']]) }}&nbsp;
-                            {{ trans('userinvitations.greeting_message') }}
+                            {{ trans('userinvitations.hi', ['name' => $user['name']]) }}&nbsp;{{ trans('userinvitations.greeting_message') }}
                         </td>
                     </tr>
                     <tr>

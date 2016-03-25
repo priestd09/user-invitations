@@ -14,6 +14,8 @@ return [
 
     'subject' => '',
 
-    'body' => ''
+    'body' => '',
+
+    'button_label' => ''
 
 ];

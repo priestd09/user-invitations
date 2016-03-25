@@ -19,7 +19,8 @@ class InvitationServiceProvider extends ServiceProvider
 	    $this->publishes([
 	    	__DIR__.'/Lang/en/' => resource_path('lang/en'),
 	        __DIR__.'/Views/' => resource_path('views/vendor/gocanto'),
-	        __DIR__.'/Config/userinvitations.php' => config_path('userinvitations.php')
+	        __DIR__.'/Config/userinvitations.php' => config_path('userinvitations.php'),
+	        __DIR__.'/Migrations/create_invitation_users_table.php' => database_path('migrations/create_invitation_users_table.php')
 	    ]);
 	}
 

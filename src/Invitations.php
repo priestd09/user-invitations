@@ -66,22 +66,6 @@ class Invitations extends Controller
         return self::$user->invitations;
     }
 
-    private static function _validate(Request $request)
-    {
-        $v = Validator::make($request->all(), [
-            'email' => 'required|email'
-        ]);
-
-        if ($v->fails()) {
-            // dd($v->errors()->all());
-            return response()->json([
-                'output' => 'error',
-                'messages' => $v->errors()->all()
-            ], 203);
-            die();
-        }
-    }
-
     /**
      * Store new invitation.
      *
@@ -130,10 +114,13 @@ class Invitations extends Controller
      */
     private static function insert($email)
     {
+        $confirmation_token = str_random(50);
+
         $inv = Invitation::create([
             'user_id' => self::$user->id,
             'guest_email' => $email,
-            'confirmation_token' => str_random(50)
+            'active' => '0',
+            'confirmation_token' => $confirmation_token
         ]);
 
         $inv->user()->decrement('invitations');
@@ -142,7 +129,8 @@ class Invitations extends Controller
             'user' => [
                 'name' => ucfirst($inv->user->name . ' ' .$inv->user->last_name)
             ],
-            'guest_email' => $email
+            'guest_email' => $email,
+            'confirmation_token' => $confirmation_token
         ]);
     }
 
