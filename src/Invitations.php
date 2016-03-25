@@ -4,6 +4,7 @@ namespace Gocanto\UserInvitations;
 
 use Auth;
 use Mail;
+use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Gocanto\UserInvitations\Models\Invitation;
@@ -65,6 +66,22 @@ class Invitations extends Controller
         return self::$user->invitations;
     }
 
+    private static function _validate(Request $request)
+    {
+        $v = Validator::make($request->all(), [
+            'email' => 'required|email'
+        ]);
+
+        if ($v->fails()) {
+            // dd($v->errors()->all());
+            return response()->json([
+                'output' => 'error',
+                'messages' => $v->errors()->all()
+            ], 203);
+            die();
+        }
+    }
+
     /**
      * Store new invitation.
      *
@@ -73,34 +90,35 @@ class Invitations extends Controller
      */
     public static function store(Request $request)
     {
-        if (self::retrieveQuantity() > 0) {
+        $v = Validator::make($request->all(), [
+            'email' => 'required|email'
+        ]);
 
+        if ($v->fails()) {
+            return response()->json([
+                'output' => 'invalid'
+            ], 403);
+        }
+
+        if (self::retrieveQuantity() > 0) {
             $exist = Invitation::select('id')->where('guest_email', 'like', $request->get('email'))->first();
 
             if (count($exist) == 0) {
-
                 self::insert($request->get('email'));
 
                 return response()->json([
                     'output' => 'ok'
                 ], 200);
-
             } else {
-
                 return response()->json([
-                    'output' => 'duplicated'
-                ], 406);
-
+                        'output' => 'duplicated'
+                    ], 406);
             }
-
         } else {
-
             return response()->json([
                 'output' => 'overdraw'
             ], 401);
-
         }
-
     }
 
     /**
@@ -114,17 +132,17 @@ class Invitations extends Controller
     {
         $inv = Invitation::create([
             'user_id' => self::$user->id,
-            'guest_email' => $email
+            'guest_email' => $email,
+            'confirmation_token' => str_random(50)
         ]);
 
         $inv->user()->decrement('invitations');
 
         self::sendEmail([
             'user' => [
-                'name' => $inv->user->name,
-                'last_name' => $inv->user->last_name,
-                'email' => $inv->user->email
-            ]
+                'name' => ucfirst($inv->user->name . ' ' .$inv->user->last_name)
+            ],
+            'guest_email' => $email
         ]);
     }
 
@@ -138,7 +156,7 @@ class Invitations extends Controller
     {
         Mail::queue('vendor.gocanto.invitations.emailBody', $data, function ($m) use ($data) {
             $m->from(config('userinvitations.email.username'), trans('userinvitations.app_name'));
-            $m->to($data['user']['email']);
+            $m->to($data['guest_email']);
             $m->subject(trans('userinvitations.subject'));
         });
     }

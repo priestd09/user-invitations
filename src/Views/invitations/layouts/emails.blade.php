@@ -15,7 +15,8 @@
                     </tr>
                     <tr>
                         <td style="padding: 10px !important;"  colspan="2">
-                            {{ trans('userinvitations.hi') }} <strong>{{ ucfirst($user['name'] . '  ' . $user['last_name']) }}!</strong>
+                            {{ trans('userinvitations.hi', ['name' => $user['name']]) }}&nbsp;
+                            {{ trans('userinvitations.greeting_message') }}
                         </td>
                     </tr>
                     <tr>
@@ -34,7 +35,7 @@
                         <table width="100%">
                             <tr>
                                 <td style="text-align: center; padding: 0 0 20px;" >
-                                    {{ trans('userinvitations.sent_to') }}&nbsp;<a href="mailto:{{ $user['email'] }}" style="color: #999; font-size: 11px" >{{ $user['email'] }}</a>
+                                    {{ trans('userinvitations.sent_to') }}&nbsp;<a href="mailto:{{ $guest_email }}" style="color: #999; font-size: 11px" >{{ $guest_email }}</a>
                                 </td>
                             </tr>
                         </table>

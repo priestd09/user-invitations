@@ -6,6 +6,8 @@ return [
 
     'hi' => '',
 
+    'greeting_message' => '',
+
     'sent_to' => '',
 
     'thanks'  => '',

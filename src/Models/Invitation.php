@@ -20,7 +20,9 @@ class Invitation extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'guest_email'
+        'user_id',
+        'guest_email',
+        'confirmation_token'
     ];
 
     /**

@@ -17,6 +17,7 @@ class CreateInvitationUsersTable extends Migration
             $table->bigInteger('user_id');
             $table->string('guest_email', 100);
             $table->char('active');
+            $table->string('confirmation_token', 100);
             $table->timestamps();
         });
     }
