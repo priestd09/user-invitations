@@ -14,10 +14,12 @@ class InvitationServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		/**
-		 * Copy the invitation views to our view vendor app.
+		 * Copy the invitation files to the app.
 		 */
 	    $this->publishes([
+	    	__DIR__.'/Lang/en/' => resource_path('lang/en'),
 	        __DIR__.'/Views/' => resource_path('views/vendor/gocanto'),
+	        __DIR__.'/Config/userinvitations.php' => config_path('userinvitations.php')
 	    ]);
 	}
 

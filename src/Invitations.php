@@ -120,7 +120,6 @@ class Invitations extends Controller
         $inv->user()->decrement('invitations');
 
         self::sendEmail([
-            'title' => 'You have a new inv to noPlaceLeftApp',
             'user' => [
                 'name' => $inv->user->name,
                 'last_name' => $inv->user->last_name,
@@ -138,9 +137,9 @@ class Invitations extends Controller
     public static function sendEmail(array $data = [])
     {
         Mail::queue('vendor.gocanto.invitations.emailBody', $data, function ($m) use ($data) {
-            $m->from(env('MAIL_USERNAME'), env('APP_NAME'));
+            $m->from(config('userinvitations.email.username'), trans('userinvitations.email.app_name'));
             $m->to($data['user']['email']);
-            $m->subject($data['title']);
+            $m->subject(trans('userinvitations.email.subject'));
         });
     }
 }

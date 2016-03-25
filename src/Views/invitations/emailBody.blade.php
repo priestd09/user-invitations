@@ -1,1 +1,1 @@
-@extends('invitations.layouts.emails')
+@extends('vendor.gocanto.invitations.layouts.emails')
