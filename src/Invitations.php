@@ -2,9 +2,6 @@
 
 namespace Gocanto\UserInvitations;
 
-use Auth;
-use Mail;
-use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Gocanto\UserInvitations\Models\Invitation;
@@ -19,6 +16,13 @@ class Invitations extends Controller
     private static $user;
 
     /**
+     * The table associated with the invitation model.
+     *
+     * @var string
+     */
+    private static $table = 'invitation_users';
+
+    /**
      * Create a new Invitations instance.
      *
      * @param void
@@ -30,7 +34,7 @@ class Invitations extends Controller
             return;
         }
 
-        self::$user = Auth::user();
+        self::$user = request()->user();
     }
 
     /**
@@ -47,13 +51,39 @@ class Invitations extends Controller
     }
 
     /**
+     * Validate users input data.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param string  &$m
+     * @param array $rules
+     * @return boolean
+     */
+    private static function isValid(Request $request, &$m, $rules = [])
+    {
+        //Creating validation. If there rules were passed in,
+        //we use it, otherwise, we keep the default ones.
+        $v = \Validator::make($request->all(), count($rules) > 0 ? $rules : [
+            'email' => 'required|email|unique:'.self::$table.',guest_email'
+        ]);
+
+        //We save the message if there was a validation problem.
+        if ($v->fails()) {
+            $m = implode(' ', $v->errors()->all());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Check for available invitations.
      *
      * @return boolean
      */
     public static function canInvite()
     {
-        return Auth::user()->invitations > 0;
+        return self::$user->invitations > 0;
     }
 
     /**
@@ -74,32 +104,32 @@ class Invitations extends Controller
      */
     public static function store(Request $request)
     {
-        $v = Validator::make($request->all(), [
-            'email' => 'required|email'
-        ]);
-
-        if ($v->fails()) {
-            return response()->json([
-                'output' => 'invalid'
-            ], 403);
-        }
-
+        //Checking if the user has invitations remaining.
         if (self::retrieveQuantity() > 0) {
-            $exist = Invitation::select('id')->where('guest_email', 'like', $request->get('email'))->first();
 
-            if (count($exist) == 0) {
+            //Input validations.
+            if (self::isValid($request, $m)) {
+
+                //Inserting invitation.
                 self::insert($request->get('email'));
 
                 return response()->json([
                     'output' => 'ok'
                 ], 200);
             } else {
+
+                //Input validations went wrong.
                 return response()->json([
-                        'output' => 'duplicated'
-                    ], 406);
+                    'message' => $m,
+                    'output' => 'invalid'
+                ], 403);
             }
         } else {
+
+            //The user does not have invitations remaining.
             return response()->json([
+                'title' => trans('userinvitations.overdraw.title'),
+                'message' => trans('userinvitations.overdraw.message'),
                 'output' => 'overdraw'
             ], 401);
         }
@@ -114,8 +144,11 @@ class Invitations extends Controller
      */
     private static function insert($email)
     {
+        //Generating email token to be used in the user
+        //signup form.
         $confirmation_token = str_random(50);
 
+        //Creating a new invitation.
         $inv = Invitation::create([
             'user_id' => self::$user->id,
             'guest_email' => $email,
@@ -123,8 +156,10 @@ class Invitations extends Controller
             'confirmation_token' => $confirmation_token
         ]);
 
+        //Decrementing user invitation counter.
         $inv->user()->decrement('invitations');
 
+        //Sending invitation email.
         self::sendEmail([
             'user' => [
                 'name' => ucfirst($inv->user->name . ' ' .$inv->user->last_name)
@@ -142,7 +177,7 @@ class Invitations extends Controller
      */
     public static function sendEmail(array $data = [])
     {
-        Mail::queue('vendor.gocanto.invitations.emailBody', $data, function ($m) use ($data) {
+        \Mail::queue('vendor.gocanto.invitations.emailBody', $data, function ($m) use ($data) {
             $m->from(config('userinvitations.email.username'), trans('userinvitations.app_name'));
             $m->to($data['guest_email']);
             $m->subject(trans('userinvitations.subject'));

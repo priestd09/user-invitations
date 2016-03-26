@@ -32,7 +32,7 @@ class InvitationServiceProvider extends ServiceProvider
     public function register()
     {
     	/**
-    	 * Bind the invitation facade to our app.
+    	 * Binding the invitation facade to the app.
     	 */
     	$this->app->bind('invite', 'Gocanto\UserInvitations\Invitations');
     }

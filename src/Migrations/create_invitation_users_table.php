@@ -14,10 +14,10 @@ class CreateInvitationUsersTable extends Migration
     {
         Schema::create('invitation_users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->string('guest_email', 100);
-            $table->char('active');
-            $table->string('confirmation_token', 100);
+            $table->bigInteger('user_id'); //the user who is sending the invitation
+            $table->string('guest_email', 100); //the receiver
+            $table->char('active'); //flag to know if the user invited is active in the app
+            $table->string('confirmation_token', 100); //email confirmation token
             $table->timestamps();
         });
     }
