@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/gocanto/user-invitations.svg?style=flat-square)](https://img.shields.io/packagist/v/gocanto/user-invitations.svg)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Total Downloads](https://img.shields.io/packagist/v/gocanto/user-invitations.svg?style=flat-square)](https://img.shields.io/packagist/v/gocanto/user-invitations.svg)
+[![Total Downloads](https://img.shields.io/packagist/dt/gocanto/user-invitations.svg?style=flat-square)](https://img.shields.io/packagist/dt/gocanto/user-invitations.svg?style=flat-square)
 
 User invitations is a laravel package, a dummy one actually, thought to control the users invitations in any application. 
 
