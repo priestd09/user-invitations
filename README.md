@@ -58,7 +58,7 @@ You are able to invoke the ***facade accessor*** to retrieve the package control
 
 ***Flow Controller***
 
-```
+```html
 @if (Invite::canInvite())
 
   /// my html block
@@ -68,7 +68,7 @@ You are able to invoke the ***facade accessor*** to retrieve the package control
 
 ***Invitations Counter***
 
-```
+```html
 <small class="pull-right">Current: {{ Invite::retrieveQuantity() }}</small>
 ```
 
