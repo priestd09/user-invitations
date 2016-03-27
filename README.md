@@ -51,6 +51,9 @@ At this point you must have your configuration file, as migration, language and 
 
 From the files published throughout the vendor, you will have the access to set all the input information required to have this package running without issues. Also, you will find these files well documented.
 
+```
+You have to add a field call "invitations" in your user table, in order to control the invitation remaining.
+```
 
 ## How it works
 
