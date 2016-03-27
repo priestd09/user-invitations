@@ -23,9 +23,6 @@
                             @section ('content') @show
                         </td>
                     </tr>
-                    <tr>
-                        <td style="padding: 10px !important;"  colspan="2">{{ trans('userinvitations.body') }}</td>
-                    </tr>
                 </table>
 
                 <div style=" width: 100%; clear: both; color: #999; padding: 20px;">
