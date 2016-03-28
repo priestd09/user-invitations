@@ -76,6 +76,17 @@ class Invitations extends Controller
         return true;
     }
 
+    public static function validToken(array $data)
+    {
+        $v = Invitation::select('id')->where([
+            'guest_email' => $data['guest_email'],
+            'confirmation_token' => $data['confirmation_token'],
+            'active' => '0'
+        ])->first();
+
+        return count($v) > 0;
+    }
+
     /**
      * Check for available invitations.
      *
