@@ -76,15 +76,19 @@ class Invitations extends Controller
         return true;
     }
 
-    public static function validToken(array $data)
+    /**
+     * Retrieve an invitation from the database.
+     *
+     * @param  array $data
+     * @return \Gocanto\UserInvitations\Models\Invitation $invitation
+     */
+    public static function getInvitation(array $data)
     {
-        $v = Invitation::select('id')->where([
+        return Invitation::select(['id', 'user_id', 'guest_email'])->where([
             'guest_email' => $data['guest_email'],
             'confirmation_token' => $data['confirmation_token'],
             'active' => '0'
         ])->first();
-
-        return count($v) > 0;
     }
 
     /**
