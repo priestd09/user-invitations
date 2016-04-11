@@ -13,7 +13,7 @@ class Invitations extends Controller
      *
      * @var Auth
      */
-    private static $user;
+    private static $__user;
 
     /**
      * The table associated with the invitation model.
@@ -30,11 +30,11 @@ class Invitations extends Controller
      */
     private static function init()
     {
-        if (self::$user) {
+        if (self::$__user) {
             return;
         }
 
-        self::$user = request()->user();
+        self::$__user = request()->user();
     }
 
     /**
@@ -45,7 +45,7 @@ class Invitations extends Controller
      */
     public function __construct()
     {
-        if (! self::$user) {
+        if (! self::$__user) {
             self::init();
         }
     }
@@ -98,7 +98,7 @@ class Invitations extends Controller
      */
     public static function canInvite()
     {
-        return self::$user->invitations > 0;
+        return self::$__user->invitations > 0;
     }
 
     /**
@@ -108,7 +108,7 @@ class Invitations extends Controller
      */
     public static function retrieveQuantity()
     {
-        return self::$user->invitations;
+        return self::$__user->invitations;
     }
 
     /**
@@ -165,7 +165,7 @@ class Invitations extends Controller
 
         //Creating a new invitation.
         $inv = Invitation::create([
-            'user_id' => self::$user->id,
+            'user_id' => self::$__user->id,
             'guest_email' => $email,
             'active' => '0',
             'confirmation_token' => $confirmation_token
@@ -176,7 +176,7 @@ class Invitations extends Controller
 
         //Sending invitation email.
         self::sendEmail([
-            'user' => [
+            '__user' => [
                 'name' => ucfirst($inv->user->name . ' ' .$inv->user->last_name)
             ],
             'guest_email' => $email,
